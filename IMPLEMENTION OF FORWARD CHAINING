@@ -1,0 +1,36 @@
+knowledge_base = [
+    ({"fever", "cough"}, "flu"),
+    ({"sore throat", "fever"}, "cold"),
+    ({"headache", "blurred vision"}, "migraine"),
+    ({"fatigue", "weight loss"}, "diabetes"),
+    ({"nausea", "vomiting", "abdominal pain"}, "food poisoning"),
+    ({"flu"}, "consult a doctor"),
+    ({"cold"}, "take rest"),
+    ({"migraine"}, "take painkillers"),
+    ({"diabetes"}, "check blood sugar"),
+    ({"food poisoning"}, "drink fluids")
+]
+
+initial_facts = {"fever", "cough"}
+facts = set(initial_facts)
+new_fact_inferred = True
+
+print("Initial Symptoms:", initial_facts)
+print("\n--- Inference Process ---")
+
+while new_fact_inferred:
+    new_fact_inferred = False
+    for conditions, conclusion in knowledge_base:
+        if conditions.issubset(facts) and conclusion not in facts:
+            facts.add(conclusion)
+            new_fact_inferred = True
+
+
+diagnoses = {"flu", "cold", "migraine", "diabetes", "food poisoning"}
+diagnosed = diagnoses.intersection(facts)
+
+print("\n--- Final Result ---")
+if diagnosed:
+    print("Patient is Diagnosed with ", ", ".join(diagnosed))
+else:
+    print("No diagnosis could be made from the given symptoms.")
