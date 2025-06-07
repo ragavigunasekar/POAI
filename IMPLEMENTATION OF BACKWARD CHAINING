@@ -1,0 +1,35 @@
+class KnowledgeBase:
+    def __init__(self):
+        self.rules = {}
+
+    def add_rule(self, conclusion, premises):
+        if conclusion not in self.rules:
+            self.rules[conclusion] = []
+        self.rules[conclusion].append(premises)
+
+def backward_chain(kb, goal, known_facts):
+    if goal in known_facts:
+        return True
+
+    if goal in kb.rules:
+        for premises in kb.rules[goal]:
+            all_conditions_met = True
+            for condition in premises:
+                if not backward_chain(kb, condition, known_facts):
+                    all_conditions_met = False
+                    break
+            if all_conditions_met:
+                return True
+    return False
+
+if __name__ == "__main__":
+    kb = KnowledgeBase()
+    kb.add_rule("flu", ["cough", "fever"])
+    kb.add_rule("fever", ["sore_throat"])
+    known_facts = {"sore_throat", "cough"}
+    query = "flu"
+
+    if backward_chain(kb, query, known_facts):
+        print(f"The patient is diagnosed with {query}")
+    else:
+        print(f"The patient is not diagnosed with {query}")
